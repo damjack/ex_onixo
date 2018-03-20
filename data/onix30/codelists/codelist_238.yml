@@ -1,0 +1,22 @@
+---
+K: EducaçãoInfantil
+'1': FundamentalI1ºAno
+'2': FundamentalI2ºAno
+'3': FundamentalI3ºAno
+'4': FundamentalI4ºAno
+'5': FundamentalI5ºAno
+'6': FundamentalIi6ºAno
+'7': FundamentalIi7ºAno
+'8': FundamentalIi8ºAno
+'9': FundamentalIi9ºAno
+'10': EnsinoMédio1ºAno
+'11': EnsinoMédio2ºAno
+'12': EnsinoMédio3ºAno
+'13': EnsinoTécnicoIntegrado
+'14': EnsinoTécnicoConcomitante
+'15': EnsinoTécnicoSubsequente
+P: EnsinoPrévestibular
+A: EnsinoSuperiorGraduaçãoLicenciaturaBacharelado
+B: EnsinoSuperiorGraduaçãoTecnologia
+D: EnsinoSuperiorPósgraduaçãoStrictoSensu
+F: EnsinoSuperiorPósgraduaçãoLatoSensu

@@ -1,0 +1,6 @@
+---
+'00': NoConstraints
+'06': Lend
+'07': TimelimitedLicense
+'08': LoanRenewal
+'09': MultiuserLicense

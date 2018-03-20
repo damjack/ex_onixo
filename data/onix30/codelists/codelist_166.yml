@@ -1,0 +1,9 @@
+---
+'02': SalesEmbargoDate
+'08': ExpectedAvailabilityDate
+'18': LastDateForReturns
+'25': ReservationOrderDeadline
+'29': LastRedownloadDate
+'30': LastTpmDate
+'50': NewSupplierStartDate
+'51': SupplierEndDate
