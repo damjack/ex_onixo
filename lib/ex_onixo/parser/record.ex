@@ -4,16 +4,37 @@ defmodule ExOnixo.Parser.Record do
   alias ExOnixo.Parser.Product.{Identifier, DescriptiveDetail, CollateralDetail, PublishingDetail, RelatedMaterial, ProductSupply}
 
   def parse_recursive(xml) do
-    product = SweetXml.xpath(xml, ~x"//Product")
+    SweetXml.xpath(xml, ~x"//Product")
+      |> to_map
+  end
+
+  defp to_map(xml) do
     %{
-        record_reference: product |> xpath(~x"./RecordReference/text()"s),
-        notification_type: RecordYml.get_human(product, %{tag: "/NotificationType", codelist: "NotificationType"}),
-        product_identifiers: Identifier.parse_recursive(product),
-        descriptive_details: DescriptiveDetail.parse_recursive(product),
-        collateral_details: CollateralDetail.parse_recursive(product),
-        publishing_details: PublishingDetail.parse_recursive(product),
-        related_materials: RelatedMaterial.parse_recursive(product),
-        product_supplies: ProductSupply.parse_recursive(product)
+        record_reference: xpath(xml, ~x"./RecordReference/text()"s),
+        notification_type: notification(RecordYml.get_tag(xml, "/NotificationType", "NotificationType")),
+        product_identifiers: Identifier.parse_recursive(xml),
+        descriptive_details: DescriptiveDetail.parse_recursive(xml),
+        collateral_details: CollateralDetail.parse_recursive(xml),
+        publishing_details: PublishingDetail.parse_recursive(xml),
+        related_materials: RelatedMaterial.parse_recursive(xml),
+        product_supplies: ProductSupply.parse_recursive(xml)
       }
+  end
+
+  defp notification(code) do
+    case code do
+      "EarlyNotification" ->
+        "draft"
+      "AdvanceNotificationConfirmed" ->
+        "confirm"
+      "NotificationConfirmedOnPublication" ->
+        "publish"
+      "UpdatePartial" ->
+        "confirm"
+      "Delete" ->
+        "mark_delete"
+      _ ->
+        "test"
+    end
   end
 end
