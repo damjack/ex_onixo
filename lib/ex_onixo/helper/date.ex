@@ -2,22 +2,21 @@ defmodule ExOnixo.Helper.Date do
   import SweetXml
   import Timex
 
-  def to_date(code, datetime) do
-    if String.length(datetime) !== 0 do
-      case code do
-        "00" ->
-          convert_strftime(datetime)
-        "01" ->
-          datetime |> String.slice(0..5) |> parse!("%Y%m", :strftime)
-        "05" ->
-          datetime |> String.slice(0..3) |> parse!("%Y", :strftime)
-        "13" ->
-          parse!(datetime, "%Y%m%dT%H%M", :strftime)
-        "14" ->
-          parse!(datetime, "%Y%m%dT%H%M%S", :strftime)
-        _ ->
-          convert_strftime(datetime)
-      end
+  def to_date("", _code), do: nil
+  def to_date(datetime, code) do
+    case code do
+      "00" ->
+        convert_strftime(datetime)
+      "01" ->
+        datetime |> String.slice(0..5) |> parse!("%Y%m", :strftime)
+      "05" ->
+        datetime |> String.slice(0..3) |> parse!("%Y", :strftime)
+      "13" ->
+        parse!(datetime, "%Y%m%dT%H%M", :strftime)
+      "14" ->
+        parse!(datetime, "%Y%m%dT%H%M%S", :strftime)
+      _ ->
+        convert_strftime(datetime)
     end
   end
 
@@ -51,6 +50,8 @@ defmodule ExOnixo.Helper.Date do
     end
   end
 
+  defp convert_strftime(nil), do: nil
+  defp convert_strftime(""), do: nil
   defp convert_strftime(string) do
     if string |> String.length > 10 do
       String.slice(string, 0..9) |> parse!("%Y-%m-%d", :strftime)
@@ -59,18 +60,17 @@ defmodule ExOnixo.Helper.Date do
     end
   end
 
+  def check_and_parse(""), do: nil
   def check_and_parse(datetext) do
-    if String.length(datetext) !== 0 do
-      case String.length(datetext) do
-        8 ->
-          parse!(datetext, "%Y%m%d", :strftime)
-        6 ->
-          parse!(datetext, "%Y%m", :strftime)
-        4 ->
-          parse!(datetext, "%Y", :strftime)
-        _ ->
-          datetext
-      end
+    case String.length(datetext) do
+      8 ->
+        parse!(datetext, "%Y%m%d", :strftime)
+      6 ->
+        parse!(datetext, "%Y%m", :strftime)
+      4 ->
+        parse!(datetext, "%Y", :strftime)
+      _ ->
+        datetext
     end
   end
 end
