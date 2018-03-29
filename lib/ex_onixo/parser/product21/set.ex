@@ -1,6 +1,5 @@
 defmodule ExOnixo.Parser.Product21.Set do
   import SweetXml
-  alias ExOnixo.Parser.RecordYml
   alias ExOnixo.Parser.Product21.Set.Identifier
 
   def parse_recursive(xml) do

@@ -6,7 +6,7 @@ defmodule ExOnixo.Parser.Product21.Publisher do
     SweetXml.xpath(xml, ~x"./Publisher"l)
     |> Enum.map(fn publisher ->
         %{
-          publisher_role: RecordYml.get_human(publisher, %{tag: "/PublishingRole", codelist: "PublishingRole"}),
+          publisher_role: RecordYml.get_tag(publisher, "/PublishingRole", "PublishingRole"),
           name_code_type: publisher |> xpath(~x"./NameCodeType/text()"s),
           name_code_type_name: publisher |> xpath(~x"./NameCodeTypeName/text()"s),
           name_code_value: publisher |> xpath(~x"./NameCodeValue/text()"s),
