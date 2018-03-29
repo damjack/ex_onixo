@@ -6,7 +6,7 @@ defmodule ExOnixo.Parser.Product.CollateralDetail.SupportingResource.ResourceVer
     |> Enum.map(fn content_date ->
         %{
           content_date_role: xpath(content_date, ~x"./ContentDateRoleCode/text()"s),
-          date: ExOnixo.Helper.Date.to_date(xpath(content_date, ~x"./Date/@dateformat"s), xpath(content_date, ~x"./ContentDate/Date/text()"s)),
+          date: ExOnixo.Helper.Date.to_date(xpath(content_date, ~x"./ContentDate/Date/text()"s), xpath(content_date, ~x"./Date/@dateformat"s)),
           date_text: xpath(content_date, ~x"./ContentDate/Date/text()"s),
         }
       end)
