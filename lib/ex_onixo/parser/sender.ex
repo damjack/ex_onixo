@@ -13,7 +13,7 @@ defmodule ExOnixo.Parser.Sender do
     |> Enum.fetch!(0)
   end
 
-  defp name(%{}), do: ""
+  defp name(nil), do: ""
   defp name(params) do
     if params[:sender_name] === "" do
       params[:sender_value]
