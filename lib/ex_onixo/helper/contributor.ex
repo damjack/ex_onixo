@@ -31,11 +31,47 @@ defmodule ExOnixo.Helper.Contributor do
             %{
               role: contributor_role(contributor[:contributor_role_code]),
               sequence_number: contributor[:sequence_number],
-              person_name: contributor[:person_name],
+              full_name: full_name(contributor),
+              first_name: first_name(contributor),
+              last_name: last_name(contributor),
               person_name_inverted: contributor[:person_name_inverted]
             }
           end)
         |> Enum.to_list
+    end
+  end
+
+  defp full_name(map) do
+    if map[:person_name] do
+      map[:person_name]
+    else
+      if Map.has_key?(map, :key_names) do
+        if Map.has_key?(map, :names_before_key) do
+          "#{map[:names_before_key]} #{map[:key_names]}"
+        else
+          map[:key_names]
+        end
+      end
+    end
+  end
+
+  defp first_name(map) do
+    if map[:person_name] do
+      map[:person_name] |> String.split(" ") |> List.first
+    else
+      if Map.has_key?(map, :names_before_key) do
+        map[:names_before_key]
+      end
+    end
+  end
+
+  defp last_name(map) do
+    if map[:person_name] do
+      map[:person_name] |> String.split(" ") |> List.last
+    else
+      if Map.has_key?(map, :key_names) do
+        map[:key_names]
+      end
     end
   end
 end
