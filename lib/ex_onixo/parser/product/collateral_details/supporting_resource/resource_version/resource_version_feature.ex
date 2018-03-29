@@ -6,8 +6,8 @@ defmodule ExOnixo.Parser.Product.CollateralDetail.SupportingResource.ResourceVer
     SweetXml.xpath(xml, ~x"./ResourceVersionFeature"l)
     |> Enum.map(fn resource_version_feature ->
         %{
-          feature_type: RecordYml.get_human(resource_version_feature, %{tag: "/ResourceVersionFeatureType", codelist: "ResourceVersionFeatureType"}),
-          feature_value: resource_version_feature |> xpath(~x"./FeatureValue/text()"s)
+          feature_type: RecordYml.get_tag(resource_version_feature, "/ResourceVersionFeatureType", "ResourceVersionFeatureType"),
+          feature_value: xpath(resource_version_feature, ~x"./FeatureValue/text()"s)
         }
       end)
     |> Enum.to_list

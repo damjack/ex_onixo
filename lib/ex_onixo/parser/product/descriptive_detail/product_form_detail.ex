@@ -7,7 +7,7 @@ defmodule ExOnixo.Parser.Product.DescriptiveDetail.ProductFormDetail do
     |> Enum.map(fn product_form_detail ->
         %{
             code: product_form_detail |> xpath(~x"./text()"s),
-            text: RecordYml.get_human(product_form_detail, %{tag: "/", codelist: "ProductFormDetail"}),
+            text: RecordYml.get_tag(product_form_detail, "/", "ProductFormDetail")
           }
       end)
     |> Enum.to_list

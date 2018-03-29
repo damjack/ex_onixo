@@ -7,10 +7,10 @@ defmodule ExOnixo.Parser.Product.ProductSupply.SupplyDetail.Price do
     SweetXml.xpath(xml, ~x"./Price"l)
     |> Enum.map(fn price ->
         %{
-            price_type: RecordYml.get_human(price, %{tag: "/PriceType", codelist: "PriceType"}),
-            price_amount: price |> xpath(~x"./PriceAmount/text()"s),
+            price_type: RecordYml.get_tag(price, "/PriceType", "PriceType"),
+            price_amount: xpath(price, ~x"./PriceAmount/text()"s),
             taxes: Tax.parse_recursive(price),
-            countries_included: price |> xpath(~x"./Territory/CountriesIncluded/text()"s),
+            countries_included: xpath(price, ~x"./Territory/CountriesIncluded/text()"s),
           }
       end)
     |> Enum.to_list

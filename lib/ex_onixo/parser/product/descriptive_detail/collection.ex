@@ -7,7 +7,7 @@ defmodule ExOnixo.Parser.Product.DescriptiveDetail.Collection do
     SweetXml.xpath(xml, ~x"./Collection"l)
     |> Enum.map(fn collection ->
         %{
-            collection_type: RecordYml.get_human(collection, %{tag: "/CollectionType", codelist: "CollectionType"}),
+            collection_type: RecordYml.get_tag(collection, "/CollectionType", "CollectionType"),
             title_detail: TitleDetail.parse_recursive(collection)
           }
       end)

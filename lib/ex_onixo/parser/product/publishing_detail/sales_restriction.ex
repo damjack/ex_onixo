@@ -6,7 +6,7 @@ defmodule ExOnixo.Parser.Product.PublishingDetail.SalesRestriction do
     SweetXml.xpath(xml, ~x"./SalesRestriction"l)
     |> Enum.map(fn sales_restriction ->
         %{
-          sales_restriction_type: RecordYml.get_human(sales_restriction, %{tag: "/SalesRestrictionType", codelist: "SalesRestrictionType"})
+          sales_restriction_type: RecordYml.get_tag(sales_restriction, "/SalesRestrictionType", "SalesRestrictionType")
         }
       end)
     |> Enum.to_list

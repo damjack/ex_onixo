@@ -8,20 +8,19 @@ defmodule ExOnixo.Parser.Product.DescriptiveDetail do
   }
 
   def parse_recursive(xml) do
-    descriptive_details =
-      SweetXml.xpath(xml, ~x"./DescriptiveDetail"l)
+    SweetXml.xpath(xml, ~x"./DescriptiveDetail"l)
       |> Enum.map(fn descriptive_detail ->
         %{
-            product_composition: RecordYml.get_human(descriptive_detail, %{tag: "/ProductComposition", codelist: "ProductComposition"}),
-            product_form: RecordYml.get_human(descriptive_detail, %{tag: "/ProductForm", codelist: "ProductForm"}),
+            product_composition: RecordYml.get_tag(descriptive_detail, "/ProductComposition", "ProductComposition"),
+            product_form: RecordYml.get_tag(descriptive_detail, "/ProductForm", "ProductForm"),
             product_form_details: ProductFormDetail.parse_recursive(descriptive_detail),
-            primary_content_type: descriptive_detail |> xpath(~x"./PrimaryContentType/text()"s),
-            product_content_type: descriptive_detail |> xpath(~x"./ProductContentType/text()"s),
-            epub_technical_protection: RecordYml.get_human(descriptive_detail, %{tag: "/EpubTechnicalProtection", codelist: "EpubTechnicalProtection"}),
-            edition_number: descriptive_detail |> xpath(~x"./EditionNumber/text()"s),
+            primary_content_type: xpath(descriptive_detail, ~x"./PrimaryContentType/text()"s),
+            product_content_type: xpath(descriptive_detail, ~x"./ProductContentType/text()"s),
+            epub_technical_protection: RecordYml.get_tag(descriptive_detail, "/EpubTechnicalProtection", "EpubTechnicalProtection"),
+            edition_number: xpath(descriptive_detail, ~x"./EditionNumber/text()"s),
             language_roles: LanguageRole.parse_recursive(descriptive_detail),
             language_codes: LanguageCode.parse_recursive(descriptive_detail),
-            extent: Extent.parse_recursive(descriptive_detail),
+            extents: Extent.parse_recursive(descriptive_detail),
             epub_usage_constraints: EpubUsageConstraint.parse_recursive(descriptive_detail),
             collections: Collection.parse_recursive(descriptive_detail),
             title_details: TitleDetail.parse_recursive(descriptive_detail),
@@ -30,8 +29,12 @@ defmodule ExOnixo.Parser.Product.DescriptiveDetail do
           }
         end)
       |> Enum.to_list
-    unless Enum.empty?(descriptive_details) do
-      Enum.fetch!(descriptive_details, 0)
-    end
+      |> handle_list
+  end
+
+  defp handle_list(nil), do: nil
+  defp handle_list([]), do: nil
+  defp handle_list(list) do
+    List.first(list)
   end
 end

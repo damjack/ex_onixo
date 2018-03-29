@@ -6,7 +6,7 @@ defmodule ExOnixo.Parser.Product.PublishingDetail.SalesRight.CountriesExcluded d
     SweetXml.xpath(xml, ~x"./CountriesExcluded"l)
     |> Enum.map(fn countries_excluded ->
         %{
-          code: RecordYml.get_human(countries_excluded, %{tag: "/", codelist: "CountriesExcluded"})
+          code: RecordYml.get_tag(countries_excluded, "/", "CountriesExcluded")
         }
       end)
     |> Enum.to_list

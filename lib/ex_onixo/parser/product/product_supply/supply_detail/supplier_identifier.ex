@@ -6,8 +6,8 @@ defmodule ExOnixo.Parser.Product.ProductSupply.SupplyDetail.SupplierIdentifier d
     SweetXml.xpath(xml, ~x"./Supplier/SupplierIdentifier"l)
     |> Enum.map(fn supplier_identifier ->
         %{
-          supplier_id_type: RecordYml.get_human(supplier_identifier, %{tag: "/SupplierIDType", codelist: "SupplierIDType"}),
-          id_value: supplier_identifier |> xpath(~x"./IDValue/text()"s)
+          supplier_id_type: RecordYml.get_tag(supplier_identifier, "/SupplierIDType", "SupplierIDType"),
+          id_value: xpath(supplier_identifier, ~x"./IDValue/text()"s)
         }
       end)
     |> Enum.to_list

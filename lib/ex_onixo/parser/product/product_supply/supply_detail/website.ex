@@ -6,8 +6,8 @@ defmodule ExOnixo.Parser.Product.ProductSupply.SupplyDetail.Website do
     SweetXml.xpath(xml, ~x"./Supplier/Website"l)
     |> Enum.map(fn website ->
         %{
-          website_type: RecordYml.get_human(website, %{tag: "/WebsiteRole", codelist: "WebsiteRole"}),
-          website_link: website |> xpath(~x"./WebsiteLink/text()"s)
+          website_type: RecordYml.get_tag(website, "/WebsiteRole", "WebsiteRole"),
+          website_link: xpath(website, ~x"./WebsiteLink/text()"s)
         }
       end)
     |> Enum.to_list

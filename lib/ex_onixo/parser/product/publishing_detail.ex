@@ -1,24 +1,31 @@
 defmodule ExOnixo.Parser.Product.PublishingDetail do
   import SweetXml
   alias ExOnixo.Parser.RecordYml
-  alias ExOnixo.Parser.Product.PublishingDetail.{PublishingDate, SalesRestriction, SalesRight}
+  alias ExOnixo.Parser.Product.PublishingDetail.{
+    PublishingDate,
+    SalesRestriction,
+    SalesRight,
+    Publisher
+  }
 
   def parse_recursive(xml) do
-    publishing_details =
-      SweetXml.xpath(xml, ~x"./PublishingDetail"l)
+    SweetXml.xpath(xml, ~x"./PublishingDetail"l)
       |> Enum.map(fn publishing_detail ->
           %{
-            publishing_role: RecordYml.get_human(publishing_detail, %{tag: "/Publisher/PublishingRole", codelist: "PublishingRole"}),
-            publisher_name: publishing_detail |> xpath(~x"./Publisher/PublisherName/text()"s),
-            publishing_status: RecordYml.get_human(publishing_detail, %{tag: "/PublishingStatus", codelist: "PublishingStatus"}),
+            publishers: Publisher.parse_recursive(publishing_detail),
+            publishing_status: RecordYml.get_tag(publishing_detail, "/PublishingStatus", "PublishingStatus"),
             publishing_date: PublishingDate.parse_recursive(publishing_detail),
             sales_restrictions: SalesRestriction.parse_recursive(publishing_detail),
             sales_rights: SalesRight.parse_recursive(publishing_detail)
           }
         end)
       |> Enum.to_list
-    unless Enum.empty?(publishing_details) do
-      Enum.fetch!(publishing_details, 0)
-    end
+      |> handle_list
+  end
+
+  defp handle_list(nil), do: nil
+  defp handle_list([]), do: nil
+  defp handle_list(list) do
+    List.first(list)
   end
 end

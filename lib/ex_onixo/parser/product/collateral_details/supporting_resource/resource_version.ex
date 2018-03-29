@@ -7,9 +7,9 @@ defmodule ExOnixo.Parser.Product.CollateralDetail.SupportingResource.ResourceVer
     SweetXml.xpath(xml, ~x"./ResourceVersion"l)
     |> Enum.map(fn resource_version ->
         %{
-          resource_form: RecordYml.get_human(resource_version, %{tag: "/ResourceForm", codelist: "ResourceForm"}),
+          resource_form: RecordYml.get_tag(resource_version, "/ResourceForm", "ResourceForm"),
           resource_version_features: ResourceVersionFeature.parse_recursive(resource_version),
-          resource_link: resource_version |> xpath(~x"./ResourceLink/text()"s),
+          resource_link: xpath(resource_version, ~x"./ResourceLink/text()"s),
           content_dates: ContentDate.parse_recursive(resource_version)
         }
       end)

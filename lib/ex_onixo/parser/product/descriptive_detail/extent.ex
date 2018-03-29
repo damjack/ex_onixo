@@ -6,9 +6,9 @@ defmodule ExOnixo.Parser.Product.DescriptiveDetail.Extent do
     SweetXml.xpath(xml, ~x"./Extent"l)
     |> Enum.map(fn extent ->
         %{
-            type: RecordYml.get_human(extent, %{tag: "/ExtentType", codelist: "ExtentType"}),
+            type: RecordYml.get_tag(extent, "/ExtentType", "ExtentType"),
             value: extent |> xpath(~x"./ExtentValue/text()"s),
-            unit: RecordYml.get_human(extent, %{tag: "/ExtentUnit", codelist: "ExtentUnit"})
+            unit: RecordYml.get_tag(extent, "/ExtentUnit", "ExtentUnit")
           }
       end)
     |> Enum.to_list

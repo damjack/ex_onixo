@@ -7,7 +7,7 @@ defmodule ExOnixo.Parser.Product.RelatedMaterial.WorkRelationCode do
       SweetXml.xpath(xml, ~x"./RelatedWork/WorkRelationCode"l)
       |> Enum.map(fn work_relation_code ->
           %{
-            code: RecordYml.get_human(work_relation_code, %{tag: "/", codelist: "WorkRelationCode"}),
+            code: RecordYml.get_tag(work_relation_code, "/", "WorkRelationCode"),
             text: work_relation_code |> xpath(~x"./text()"s)
           }
         end)

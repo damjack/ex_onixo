@@ -6,7 +6,7 @@ defmodule ExOnixo.Parser.Product.DescriptiveDetail.Collection.TitleDetail.TitleE
     SweetXml.xpath(xml, ~x"./TitleElement"l)
     |> Enum.map(fn title_element ->
         %{
-            title_element_level: RecordYml.get_human(title_element, %{tag: "/TitleElementLevel", codelist: "TitleElementLevel"}),
+            title_element_level: RecordYml.get_tag(title_element, "/TitleElementLevel", "TitleElementLevel"),
             part_number: title_element |> xpath(~x"./PartNumber/text()"s),
             title_text: title_element |> xpath(~x"./TitleText/text()"s)
           }

@@ -1,10 +1,12 @@
 defmodule ExOnixo.Parser.Product.CollateralDetail do
   import SweetXml
-  alias ExOnixo.Parser.Product.CollateralDetail.{TextContent, SupportingResource}
+  alias ExOnixo.Parser.Product.CollateralDetail.{
+    TextContent,
+    SupportingResource
+  }
 
   def parse_recursive(xml) do
-    collateral_details =
-      SweetXml.xpath(xml, ~x"./CollateralDetail"l)
+    SweetXml.xpath(xml, ~x"./CollateralDetail"l)
       |> Enum.map(fn collateral_detail ->
           %{
             text_contents: TextContent.parse_recursive(collateral_detail),
@@ -12,8 +14,12 @@ defmodule ExOnixo.Parser.Product.CollateralDetail do
           }
         end)
       |> Enum.to_list
-    unless Enum.empty?(collateral_details) do
-      Enum.fetch!(collateral_details, 0)
-    end
+      |> handle_list
+  end
+
+  defp handle_list(nil), do: nil
+  defp handle_list([]), do: nil
+  defp handle_list(list) do
+    List.first(list)
   end
 end

@@ -6,7 +6,7 @@ defmodule ExOnixo.Parser.Product.DescriptiveDetail.LanguageCode do
     SweetXml.xpath(xml, ~x"./Language/LanguageCode"l)
     |> Enum.map(fn language_code ->
         %{
-            code: RecordYml.get_human(language_code, %{tag: "/", codelist: "LanguageCode"}),
+            code: RecordYml.get_tag(language_code, "/", "LanguageCode"),
             text: language_code |> xpath(~x"./text()"s)
           }
       end)
