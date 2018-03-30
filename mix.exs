@@ -28,8 +28,7 @@ defmodule ExOnixo.MixProject do
       {:sweet_xml, "~> 0.6.5"},
       {:html_entities, "~> 0.4.0"},
       {:yaml_elixir, "~> 1.3.1"},
-      {:timex, "~> 3.1"},
-      {:slugger, "~> 0.2"}
+      {:timex, "~> 3.1"}
     ]
   end
 end
