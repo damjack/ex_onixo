@@ -25,7 +25,7 @@ defmodule Mix.Tasks.Codelist.YamlToEx do
           end)
         |> List.to_string |> String.slice(0..-2)
 
-    output = "defmodule ExOnixo.Parser.Tags do
+    output = "defmodule ExOnixo.Helper.Tags do
   def tag30 do
     %{#{yaml30}}
   end
@@ -35,7 +35,7 @@ defmodule Mix.Tasks.Codelist.YamlToEx do
   end
 end"
 
-    {:ok, file} = File.open "lib/ex_onixo/parser/tags.ex", [:write]
+    {:ok, file} = File.open "lib/ex_onixo/helper/tags.ex", [:write]
     IO.binwrite file, output
     File.close file
   end
