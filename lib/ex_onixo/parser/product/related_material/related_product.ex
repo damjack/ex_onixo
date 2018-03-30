@@ -1,6 +1,6 @@
 defmodule ExOnixo.Parser.Product.RelatedMaterial.RelatedProduct do
   import SweetXml
-  alias ExOnixo.Parser.RecordYml
+  alias ExOnixo.Helper.ElementYml
   alias ExOnixo.Parser.Product.RelatedMaterial.RelatedProduct.{
     RelatedProductIdentifier
   }
@@ -9,10 +9,10 @@ defmodule ExOnixo.Parser.Product.RelatedMaterial.RelatedProduct do
     SweetXml.xpath(xml, ~x"./RelatedProduct"l)
     |> Enum.map(fn related_product ->
         %{
-          text: RecordYml.get_tag(related_product, "/ProductRelationCode", "ProductRelationCode"),
-          code: related_product |> xpath(~x"./ProductRelationCode/text()"s),
-          product_form: RecordYml.get_tag(related_product, "/ProductForm", "ProductForm"),
-          product_form_detail: RecordYml.get_tag(related_product, "/ProductFormDetail", "ProductFormDetail"),
+          text: ElementYml.get_tag(related_product, "/ProductRelationCode", "ProductRelationCode"),
+          code: xpath(related_product, ~x"./ProductRelationCode/text()"s),
+          product_form: ElementYml.get_tag(related_product, "/ProductForm", "ProductForm"),
+          product_form_detail: ElementYml.get_tag(related_product, "/ProductFormDetail", "ProductFormDetail"),
           product_identifiers: RelatedProductIdentifier.parse_recursive(related_product)
         }
       end)

@@ -1,8 +1,21 @@
-defmodule ExOnixo.Parser.Record21 do
+defmodule ExOnixo.Parser.Product21 do
   import SweetXml
-  alias ExOnixo.Parser.RecordYml
-  alias ExOnixo.Parser.Product.{Identifier, DescriptiveDetail.Contributor, DescriptiveDetail.Subject}
-  alias ExOnixo.Parser.Product21.{Serie, Set, Illustration, OtherText, MediaFile, Imprint, Publisher, SupplyDetail}
+  alias ExOnixo.Helper.ElementYml
+  alias ExOnixo.Parser.Product.Identifier
+  alias ExOnixo.Parser.Product.DescriptiveDetail.{
+    Contributor,
+    Subject
+  }
+  alias ExOnixo.Parser.Product21.{
+    Serie,
+    Set,
+    Illustration,
+    OtherText,
+    MediaFile,
+    Imprint,
+    Publisher,
+    SupplyDetail
+  }
 
   def parse_recursive(xml) do
     SweetXml.xpath(xml, ~x"//Product")
@@ -12,10 +25,10 @@ defmodule ExOnixo.Parser.Record21 do
   defp to_map(xml) do
     %{
         record_reference: xpath(xml, ~x"./RecordReference/text()"s),
-        notification_type: notification(RecordYml.get_tag21(xml, "/NotificationType", "NotificationType")),
+        notification_type: ElementYml.get_tag21(xml, "/NotificationType", "NotificationType"),
         record_source_name: xpath(xml, ~x"./RecordReference/text()"s),
         product_identifiers: Identifier.parse_recursive(xml),
-        product_form: RecordYml.get_tag(xml, "/ProductForm", "ProductForm"),
+        product_form: ElementYml.get_tag(xml, "/ProductForm", "ProductForm"),
         product_form_description: xpath(xml, ~x"./ProductFormDescription/text()"s),
         trade_category: xpath(xml, ~x"./TradeCategory/text()"s),
         series: Serie.parse_recursive(xml),
@@ -36,29 +49,12 @@ defmodule ExOnixo.Parser.Record21 do
         media_files: MediaFile.parse_recursive(xml),
         imprints: Imprint.parse_recursive(xml),
         publishers: Publisher.parse_recursive(xml),
-        publishing_status: RecordYml.get_tag(xml, "/PublishingStatus", "PublishingStatus"),
+        publishing_status: ElementYml.get_tag(xml, "/PublishingStatus", "PublishingStatus"),
         publication_date: ExOnixo.Helper.Date.check_and_parse(xpath(xml, ~x"./PublicationDate/text()"s)),
         publication_date_text: xpath(xml, ~x"./PublicationDate/text()"s),
         out_of_print_date: ExOnixo.Helper.Date.check_and_parse(xpath(xml, ~x"./OutOfPrintDate/text()"s)),
         out_of_print_date_text: xpath(xml, ~x"./OutOfPrintDate/text()"s),
         supply_detail: SupplyDetail.parse_recursive(xml)
       }
-  end
-
-  defp notification(code) do
-    case code do
-      "EarlyNotification" ->
-        "draft"
-      "AdvanceNotificationConfirmed" ->
-        "confirm"
-      "NotificationConfirmedOnPublication" ->
-        "publish"
-      "UpdatePartial" ->
-        "confirm"
-      "Delete" ->
-        "mark_delete"
-      _ ->
-        "test"
-    end
   end
 end

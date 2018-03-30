@@ -1,6 +1,6 @@
 defmodule ExOnixo.Parser.Product.DescriptiveDetail do
   import SweetXml
-  alias ExOnixo.Parser.RecordYml
+  alias ExOnixo.Helper.ElementYml
   alias ExOnixo.Parser.Product.DescriptiveDetail.{
     ProductFormDetail, Extent, EpubUsageConstraint,
     Collection, TitleDetail, Contributor, Subject,
@@ -11,12 +11,12 @@ defmodule ExOnixo.Parser.Product.DescriptiveDetail do
     SweetXml.xpath(xml, ~x"./DescriptiveDetail"l)
       |> Enum.map(fn descriptive_detail ->
         %{
-            product_composition: RecordYml.get_tag(descriptive_detail, "/ProductComposition", "ProductComposition"),
-            product_form: RecordYml.get_tag(descriptive_detail, "/ProductForm", "ProductForm"),
+            product_composition: ElementYml.get_tag(descriptive_detail, "/ProductComposition", "ProductComposition"),
+            product_form: ElementYml.get_tag(descriptive_detail, "/ProductForm", "ProductForm"),
             product_form_details: ProductFormDetail.parse_recursive(descriptive_detail),
             primary_content_type: xpath(descriptive_detail, ~x"./PrimaryContentType/text()"s),
             product_content_type: xpath(descriptive_detail, ~x"./ProductContentType/text()"s),
-            epub_technical_protection: RecordYml.get_tag(descriptive_detail, "/EpubTechnicalProtection", "EpubTechnicalProtection"),
+            epub_technical_protection: ElementYml.get_tag(descriptive_detail, "/EpubTechnicalProtection", "EpubTechnicalProtection"),
             edition_number: xpath(descriptive_detail, ~x"./EditionNumber/text()"s),
             language_roles: LanguageRole.parse_recursive(descriptive_detail),
             language_codes: LanguageCode.parse_recursive(descriptive_detail),

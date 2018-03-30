@@ -1,6 +1,6 @@
 defmodule ExOnixo.Parser.Product.PublishingDetail do
   import SweetXml
-  alias ExOnixo.Parser.RecordYml
+  alias ExOnixo.Helper.ElementYml
   alias ExOnixo.Parser.Product.PublishingDetail.{
     PublishingDate,
     SalesRestriction,
@@ -13,7 +13,7 @@ defmodule ExOnixo.Parser.Product.PublishingDetail do
       |> Enum.map(fn publishing_detail ->
           %{
             publishers: Publisher.parse_recursive(publishing_detail),
-            publishing_status: RecordYml.get_tag(publishing_detail, "/PublishingStatus", "PublishingStatus"),
+            publishing_status: ElementYml.get_tag(publishing_detail, "/PublishingStatus", "PublishingStatus"),
             publishing_date: PublishingDate.parse_recursive(publishing_detail),
             sales_restrictions: SalesRestriction.parse_recursive(publishing_detail),
             sales_rights: SalesRight.parse_recursive(publishing_detail)

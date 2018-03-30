@@ -1,12 +1,12 @@
 defmodule ExOnixo.Parser.Product.DescriptiveDetail.Contributor do
   import SweetXml
-  alias ExOnixo.Parser.RecordYml
+  alias ExOnixo.Helper.ElementYml
 
   def parse_recursive(xml) do
     SweetXml.xpath(xml, ~x"./Contributor"l)
     |> Enum.map(fn contributor ->
         %{
-            contributor_role_text: RecordYml.get_tag(contributor, "/ContributorRole", "ContributorRole"),
+            contributor_role_text: ElementYml.get_tag(contributor, "/ContributorRole", "ContributorRole"),
             contributor_role_code: xpath(contributor, ~x"./ContributorRole/text()"s),
             sequence_number: xpath(contributor, ~x"./SequenceNumber/text()"s),
             names_before_key: xpath(contributor, ~x"./NamesBeforeKey/text()"s),

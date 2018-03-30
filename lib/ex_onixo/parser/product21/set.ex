@@ -7,9 +7,9 @@ defmodule ExOnixo.Parser.Product21.Set do
     |> Enum.map(fn set ->
         %{
           identifier: Identifier.parse_recursive(set),
-          title_of_set: set |> xpath(~x"./TitleOfSet/text()"s),
-          item_number_within_set: set |> xpath(~x"./ItemNumberWithinSet/text()"s),
-          set_item_title: set |> xpath(~x"./SetItemTitle/text()"s)
+          title_of_set: xpath(set, ~x"./TitleOfSet/text()"s),
+          item_number_within_set: xpath(set, ~x"./ItemNumberWithinSet/text()"s),
+          set_item_title: xpath(set, ~x"./SetItemTitle/text()"s)
         }
       end)
     |> Enum.to_list

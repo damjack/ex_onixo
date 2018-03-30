@@ -1,14 +1,14 @@
 defmodule ExOnixo.Parser.Product.PublishingDetail.Publisher do
   import SweetXml
-  alias ExOnixo.Parser.RecordYml
+  alias ExOnixo.Helper.ElementYml
 
   def parse_recursive(xml) do
     SweetXml.xpath(xml, ~x"./Publisher"l)
     |> Enum.map(fn publisher ->
         %{
-          code_role: publisher |> xpath(~x"./PublishingRole/text()"s),
-          text_role: RecordYml.get_tag(publisher, "/PublishingRole", "PublishingRole"),
-          name: publisher |> xpath(~x"./PublisherName/text()"s)
+          code_role: xpath(publisher, ~x"./PublishingRole/text()"s),
+          text_role: ElementYml.get_tag(publisher, "/PublishingRole", "PublishingRole"),
+          name: xpath(publisher, ~x"./PublisherName/text()"s)
         }
       end)
     |> Enum.to_list

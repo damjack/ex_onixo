@@ -1,13 +1,13 @@
 defmodule ExOnixo.Parser.Product.RelatedMaterial.RelatedWorkIdentifier do
   import SweetXml
-  alias ExOnixo.Parser.RecordYml
+  alias ExOnixo.Helper.ElementYml
 
   def parse_recursive(xml) do
     SweetXml.xpath(xml, ~x"./RelatedWork/WorkIdentifier"l)
     |> Enum.map(fn related_work_identifier ->
         %{
-          work_id_type: RecordYml.get_tag(related_work_identifier, "/WorkIDType", "WorkIDType"),
-          id_value: related_work_identifier |> xpath(~x"./IDValue/text()"s)
+          work_id_type: ElementYml.get_tag(related_work_identifier, "/WorkIDType", "WorkIDType"),
+          id_value: xpath(related_work_identifier, ~x"./IDValue/text()"s)
         }
       end)
     |> Enum.to_list
