@@ -12,11 +12,4 @@ defmodule ExOnixo.Parser.Sender21 do
       end)
     |> Enum.fetch!(0)
   end
-
-  def convert(map) do
-    %{
-      name: map[:from_company],
-      code: Slugger.slugify(map[:from_company] |> String.downcase)
-    }
-  end
 end

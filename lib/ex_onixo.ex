@@ -1,17 +1,21 @@
 defmodule ExOnixo do
-  alias ExOnixo.{Parser}
+  alias ExOnixo.Parser
   @moduledoc false
 
-  # @spec analyze(binary) :: xml_tree | String.t()
-
-  def analyze(file, opts \\ []) do
-    Parser.parse_direct(file, opts)
+  def read_sender(path, args) do
+    Parser.parse_read_sender(path, args)
   end
 
-  # @spec sanalyze(xml_tree | binary, keyword) :: binary
+  def stream_sender(path, args) do
+    Parser.parse_stream_sender(path, args)
+  end
 
-  def sanalyze(file, opts \\ []) do
-    Parser.parse_stream(file, opts)
+  def read_product(path) do
+    Parser.init_read_parser(path)
+  end
+
+  def stream_product(path) do
+    Parser.init_stream_parser(path)
   end
 
   # @spec raw_xml(xml_tree | binary, keyword) :: binary

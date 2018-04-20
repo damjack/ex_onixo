@@ -1,41 +1,64 @@
 defmodule ExOnixo.Parser do
   import SweetXml
+  alias ExOnixo.Parser.{Product, Product21, Sender, Sender21}
   @moduledoc false
   defdelegate raw_xml(xml_tree), to: ExOnixo.Raw
 
-  def parse_direct(origin, opts) do
-    file = set(origin)
-    doc = SweetXml.parse(file)
-    doc |> SweetXml.xpath(
-      ~x"//#{opts[:tag]}"l,
-      record_reference: ~x"./RecordReference/text()",
-      notification_type: ~x"./NotificationType/text()",
-      identifiers: [
-        ~x".//ProductIdentifier",
-        type: ~x"./ProductIDType/text()",
-        value: ~x"./IDValue/text()"
-      ]
-    )
+  def init_read_parser(origin) do
+    init_read(origin)
+      |> SweetXml.stream_tags([:Product], discard: [:Product])
   end
 
-  def parse_stream(origin, opts) do
-    file = set_stream(origin)
-    file
-      |> SweetXml.stream_tags(String.to_atom(opts[:tag]), discard: [String.to_atom(opts[:tag])])
-      |> Stream.map(fn
-        {_, doc} ->
-          doc |> SweetXml.xpath(~x"//opts[:tag]"l)
-          |> ExOnixo.raw_xml
-          IO.inspect(doc)
+  def init_stream_parser(origin) do
+    init_stream(origin)
+      |> SweetXml.stream_tags([:Product], discard: [:Product])
+  end
+
+  def parse_stream_product(origin, %{release: "3.0"}) do
+    init_stream_parser(origin)
+      |> Stream.map(fn {_, doc} ->
+          Product.parse_recursive(doc)
+        end)
+      |> Enum.to_list
+  end
+  def parse_stream_product(origin, %{release: "2.1"}) do
+    init_stream_parser(origin)
+      |> Stream.map(fn {_, doc} ->
+          Product21.parse_recursive(doc)
         end)
       |> Enum.to_list
   end
 
-  defp set(origin) do
+  def raw_stream(origin, opts) do
+    init_stream(origin)
+      |> SweetXml.stream_tags(String.to_atom(opts[:tag]), discard: [String.to_atom(opts[:tag])])
+      |> Stream.map(fn
+        {_, doc} ->
+          SweetXml.xpath(doc, ~x"//opts[:tag]"l)
+          # |> ExOnixo.raw_xml
+        end)
+      |> Enum.to_list
+  end
+
+  def parse_read_sender("", _args), do: {:error, "File not found"}
+  def parse_read_sender(origin, %{release: "3.0"}),
+    do: init_read(origin) |> Sender.parse_recursive
+  def parse_read_sender(origin, %{release: "2.1"}),
+    do: init_read(origin) |> Sender21.parse_recursive
+
+  def parse_stream_sender("", _args), do: {:error, "File not found"}
+  def parse_stream_sender(origin, %{release: "3.0"}),
+    do: init_stream(origin) |> Sender.parse_recursive
+  def parse_stream_sender(origin, %{release: "2.1"}),
+    do: init_stream(origin) |> Sender21.parse_recursive
+
+  defp init_read(""), do: {:error, "No file found"}
+  defp init_read(origin) do
     File.read! origin
   end
 
-  defp set_stream(origin) do
+  defp init_stream(""), do: {:error, "No file found"}
+  defp init_stream(origin) do
     File.stream! origin
   end
 end

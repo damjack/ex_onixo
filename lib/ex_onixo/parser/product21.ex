@@ -8,6 +8,7 @@ defmodule ExOnixo.Parser.Product21 do
   }
   alias ExOnixo.Parser.Product21.{
     Serie,
+    Language,
     Set,
     Illustration,
     OtherText,
@@ -33,6 +34,7 @@ defmodule ExOnixo.Parser.Product21 do
         trade_category: xpath(xml, ~x"./TradeCategory/text()"s),
         series: Serie.parse_recursive(xml),
         sets: Set.parse_recursive(xml),
+        languages: Language.parse_recursive(xml),
         contributors: Contributor.parse_recursive(xml),
         title_type: xpath(xml, ~x"./Title/TitleType/text()"s),
         title_text: xpath(xml, ~x"./Title/TitleText/text()"s),
