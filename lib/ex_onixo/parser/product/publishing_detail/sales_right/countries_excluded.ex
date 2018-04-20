@@ -10,5 +10,9 @@ defmodule ExOnixo.Parser.Product.PublishingDetail.SalesRight.CountriesExcluded d
         }
       end)
     |> Enum.to_list
+    |> handle_error
   end
+
+  defp handle_error([]), do: {:error, ""}
+  defp handle_error(list), do: list
 end

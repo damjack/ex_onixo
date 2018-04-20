@@ -1,7 +1,14 @@
 defmodule ExOnixo.Parser.Product do
   import SweetXml
   alias ExOnixo.Helper.ElementYml
-  alias ExOnixo.Parser.Product.{Identifier, DescriptiveDetail, CollateralDetail, PublishingDetail, RelatedMaterial, ProductSupply}
+  alias ExOnixo.Parser.Product.{
+    Identifier,
+    DescriptiveDetail,
+    CollateralDetail,
+    PublishingDetail,
+    RelatedMaterial,
+    ProductSupply
+  }
 
   def parse_recursive(xml) do
     SweetXml.xpath(xml, ~x"//Product")

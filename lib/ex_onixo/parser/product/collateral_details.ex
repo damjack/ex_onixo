@@ -14,12 +14,12 @@ defmodule ExOnixo.Parser.Product.CollateralDetail do
           }
         end)
       |> Enum.to_list
-      |> handle_list
+      |> handle_maps
   end
 
-  defp handle_list(nil), do: nil
-  defp handle_list([]), do: nil
-  defp handle_list(list) do
+  defp handle_maps(nil), do: {:error, ""}
+  defp handle_maps([]), do: {:error, ""}
+  defp handle_maps(list) do
     List.first(list)
   end
 end

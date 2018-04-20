@@ -11,5 +11,9 @@ defmodule ExOnixo.Parser.Product.Identifier do
           }
       end)
     |> Enum.to_list
+    |> handle_list
   end
+
+  defp handle_list(nil), do: {:error, ""}
+  defp handle_list(list), do: list
 end

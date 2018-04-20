@@ -38,7 +38,6 @@ defmodule ExOnixo.Raw do
   defp build_attrs(attr, attrs), do: "#{attrs} #{attr}"
 
   defp tag_for(type, attrs, children) do
-    IO.inspect type
     tag_with_attrs(type, attrs, children) <>
       build_raw_xml(children, "") <> close_end_tag(type, children)
   end

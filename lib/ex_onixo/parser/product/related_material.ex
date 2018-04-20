@@ -19,8 +19,8 @@ defmodule ExOnixo.Parser.Product.RelatedMaterial do
       |> handle_list
   end
 
-  defp handle_list(nil), do: nil
-  defp handle_list([]), do: nil
+  defp handle_list(nil), do: {:error, ""}
+  defp handle_list([]), do: {:error, ""}
   defp handle_list(list) do
     List.first(list)
   end

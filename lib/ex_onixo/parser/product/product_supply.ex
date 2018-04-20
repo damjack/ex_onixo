@@ -10,5 +10,9 @@ defmodule ExOnixo.Parser.Product.ProductSupply do
         }
       end)
     |> Enum.to_list
+    |> handle_list
   end
+
+  defp handle_list(nil), do: {:error, ""}
+  defp handle_list(list), do: list
 end

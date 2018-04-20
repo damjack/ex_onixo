@@ -9,6 +9,7 @@ defmodule ExOnixo.Helper.ElementYml do
 
   defp handle_tag(code, text) do
     Tags.tag30[text][code]
+    |> handle_error
   end
 
   def get_tag21(xml, tag, text) do
@@ -18,5 +19,10 @@ defmodule ExOnixo.Helper.ElementYml do
 
   defp handle_tag21(code, text) do
     Tags.tag21[text][code]
+    |> handle_error
   end
+
+   defp handle_error(""), do: {:error, ""}
+   defp handle_error(nil), do: {:error, ""}
+   defp handle_error(text), do: text
 end

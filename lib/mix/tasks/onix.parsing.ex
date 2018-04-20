@@ -13,6 +13,6 @@ defmodule Mix.Tasks.Onix.Parsing do
   def run([path, version]) do
     Application.ensure_all_started(:ex_catalogue)
     # IO.puts "args: #{inspect(args, [pretty: true, width: 0])}"
-    ExOnixo.Parser.parse_stream_sender(path, %{release: version})
+    ExOnixo.stream_product(path, %{release: version})
   end
 end

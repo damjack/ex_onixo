@@ -3,8 +3,7 @@ defmodule ExOnixo.Parser.Product.RelatedMaterial.WorkRelationCode do
   alias ExOnixo.Helper.ElementYml
 
   def parse_recursive(xml) do
-    related_materials =
-      SweetXml.xpath(xml, ~x"./RelatedWork/WorkRelationCode"l)
+    SweetXml.xpath(xml, ~x"./RelatedWork/WorkRelationCode"l)
       |> Enum.map(fn work_relation_code ->
           %{
             code: ElementYml.get_tag(work_relation_code, "/", "WorkRelationCode"),
@@ -12,8 +11,12 @@ defmodule ExOnixo.Parser.Product.RelatedMaterial.WorkRelationCode do
           }
         end)
       |> Enum.to_list
-    unless Enum.empty?(related_materials) do
-      Enum.fetch!(related_materials, 0)
-    end
+      |> handle_list
+  end
+
+  defp handle_list(nil), do: {:error, ""}
+  defp handle_list([]), do: {:error, ""}
+  defp handle_list(list) do
+    List.first(list)
   end
 end
